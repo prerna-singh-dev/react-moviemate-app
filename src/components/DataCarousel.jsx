@@ -40,10 +40,7 @@ const DataCarousel = ({ data, category }) => {
               return (
                 <div key={item.id} className="flex-1 min-w-20 md:min-w-25">
                   <Link
-                    to={
-                      (category === "Movie" ? "/movies/" : "/tv-shows/") +
-                      item.id
-                    }
+                    to={(category === "Movie" ? "/movies/" : "/tv/") + item.id}
                   >
                     <img
                       className="w-full h-auto object-cover"
