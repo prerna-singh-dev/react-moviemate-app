@@ -39,15 +39,22 @@ const DataCarousel = ({ data, category }) => {
             {data.slice(0, slideToShow).map((item) => {
               return (
                 <div key={item.id} className="flex-1 min-w-20 md:min-w-25">
-                  <img
-                    className="w-full h-auto object-cover"
-                    src={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
-                    alt={item.title ?? item.name}
-                    title={item.title ?? item.name}
-                  />
-                  <h3 className="my-2 text-sm line-clamp-2 overflow-hidden">
-                    {item.title ?? item.name}
-                  </h3>
+                  <Link
+                    to={
+                      (category === "Movie" ? "/movies/" : "/tv-shows/") +
+                      item.id
+                    }
+                  >
+                    <img
+                      className="w-full h-auto object-cover"
+                      src={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
+                      alt={item.title ?? item.name}
+                      title={item.title ?? item.name}
+                    />
+                    <h3 className="my-2 text-sm line-clamp-2 overflow-hidden">
+                      {item.title ?? item.name}
+                    </h3>
+                  </Link>
                 </div>
               );
             })}
