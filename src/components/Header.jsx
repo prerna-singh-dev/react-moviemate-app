@@ -4,10 +4,10 @@ function Header() {
   return (
     <header className="m-0 py-3 px-5 bg-orange-950 text-white flex justify-between items-center">
       <h1 className="flex-1 text-2xl bitcount-single-500">
-        <NavLink>Movie Zone</NavLink>
+        <NavLink>MovieMate</NavLink>
       </h1>
       <nav>
-        <ul className="list-none flex flex-row gap-5 justify-center">
+        <ul className="text-xs md:text-sm list-none flex flex-row gap-5 justify-center">
           <li>
             <NavLink
               className={({ isActive }) =>

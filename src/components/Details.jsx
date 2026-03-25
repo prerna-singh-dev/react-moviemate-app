@@ -44,16 +44,28 @@ function Details() {
   return (
     <>
       <section className="relative">
-        <img
-          src={`https://image.tmdb.org/t/p/original/${data.backdrop_path}`}
-          alt=""
-          className="block w-full h-150 object-cover object-top"
-        />
+        <div
+          className={`w-full  ${
+            !data.backdrop_path ? "h-100 md:h-120" : "h-150"
+          } relative`}
+        >
+          <img
+            src={`${
+              !data.backdrop_path
+                ? `/background.jpg`
+                : `https://image.tmdb.org/t/p/original/${data.backdrop_path}`
+            }`}
+            alt=""
+            className={`block w-full h-full object-cover ${
+              !data.backdrop_path ? "object-bottom" : "object-top"
+            }`}
+          />
+        </div>
       </section>
-      <section className="m-12">
+      <section className="p-6 md:p-12">
         <>
           <div className="flex justify-between">
-            <h2 className="text-5xl mb-2 flex-1">{data.title}</h2>
+            <h2 className="text-3xl md:text-5xl mb-2 flex-1">{data.title}</h2>
             <div className="flex items-center gap-2 text-md text-gray-600">
               <Star />
               <span>{data.vote_average.toFixed(1)} / 10</span>
@@ -96,48 +108,62 @@ function Details() {
               </li>
             ))}
           </ul>
-          <p>{data.overview}</p>
+          <p className="text-sm md:text-md lg:text-lg">{data.overview}</p>
         </>
 
-        <ul className="my-5">
+        <ul className="my-5 text-sm md:text-md lg:text-lg">
           {from === "movie" && (
             <>
-              <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
-                <span className="text-md font-medium">Directors : </span>
-                {directorList &&
-                  directorList.map((director) => (
-                    <span
-                      key={director.id}
-                      className="mx-2 text-gray-600 text-md"
-                    >
-                      {director.name}
-                    </span>
-                  ))}
-              </li>
-              <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
-                <span className="text-md font-medium">Writers : </span>
-                {writerList &&
-                  writerList.map((writer) => (
-                    <span
-                      key={writer.id}
-                      className="mx-2 text-gray-600 text-md"
-                    >
-                      {writer.name}
-                    </span>
-                  ))}
-              </li>
+              {directorList && directorList.length > 0 && (
+                <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2 flex items-center">
+                  <span className="text-md font-medium">Directors : </span>
+                  {directorList &&
+                    directorList.slice(0, 5).map((director, index, arr) => (
+                      <>
+                        <span key={director.id} className="mx-2 text-gray-600">
+                          {director.name}
+                        </span>
+                        {index != arr.length - 1 && (
+                          <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                        )}
+                      </>
+                    ))}
+                </li>
+              )}
+              {writerList && writerList.length > 0 && (
+                <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
+                  <span className="text-md font-medium">Writers : </span>
+                  {writerList &&
+                    writerList.slice(0, 5).map((writer, index, arr) => (
+                      <>
+                        <span key={writer.id} className="mx-2 text-gray-600">
+                          {writer.name}
+                        </span>
+                        {index != arr.length - 1 && (
+                          <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                        )}
+                      </>
+                    ))}
+                </li>
+              )}
             </>
           )}
-          <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
-            <span className="text-md font-medium">Stars</span>
-            {actorsList &&
-              actorsList.map((actor) => (
-                <span key={actor.id} className="mx-2 text-gray-600 text-md">
-                  {actor.name}{" "}
-                  <span className="text-sm">({actor.character})</span>
-                </span>
-              ))}
-          </li>
+          {actorsList && actorsList.length > 0 && (
+            <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
+              <span className="text-md font-medium">Stars</span>
+              {actorsList &&
+                actorsList.map((actor, index, arr) => (
+                  <>
+                    <span key={actor.id} className="mx-2 text-gray-600">
+                      {actor.name}
+                    </span>
+                    {index != arr.length - 1 && (
+                      <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                    )}
+                  </>
+                ))}
+            </li>
+          )}
         </ul>
       </section>
     </>

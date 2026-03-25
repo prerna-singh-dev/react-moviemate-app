@@ -39,7 +39,6 @@ function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log("calling scroll");
       const nowDate = Date.now();
       if (nowDate - lastCall.current >= 500) {
         lastCall.current = nowDate;
@@ -83,16 +82,16 @@ function Home() {
         <div className="w-full h-120 relative">
           <img
             src="/background.jpg"
-            alt="Home page background image below search bar"
-            title="Movie Zone"
+            alt="Home page banner image below search bar"
+            title="MovieMate"
             className="w-full h-full object-cover object-bottom"
           />
 
           <form className="absolute w-full h-full inset-0 flex justify-center items-center flex-col">
-            <div className="bg-black  py-12 px-15  text-left w-[70%]">
+            <div className="bg-black p-8 md:py-12 md:px-15  text-left w-[90%] sm:w-[80%] lg:w-[70%]">
               <label
                 htmlFor="searchBar"
-                className="text-2xl mb-5 text-white block"
+                className="text-xl md:text-2xl mb-5 text-white block"
               >
                 Find your favourite movie or tv shows
               </label>
@@ -113,13 +112,16 @@ function Home() {
       </section>
 
       {searchText ? (
-        <section className="p-12">
+        <section className="p-6 md:p-12">
           {searchData?.results?.length > 0 ? (
             <ul>
               {searchData.results.map((item) => {
                 if (item.media_type === "movie" || item.media_type === "tv") {
                   return (
-                    <li className="py-4 border-b-2 border-dashed border-gray-400 mb-4">
+                    <li
+                      className="py-4 border-b-2 border-dashed border-gray-300 mb-4"
+                      key={item.id}
+                    >
                       <Link
                         to={
                           (item.media_type === "movie"
@@ -154,9 +156,11 @@ function Home() {
               })}
             </ul>
           ) : searchData?.results?.length === 0 ? (
-            <p>No data found!!</p>
+            <p className="text-center text-lg p-6">No data found!!</p>
           ) : (
-            <SpinLoader />
+            <div className="flex justify-center py-6">
+              <SpinLoader />
+            </div>
           )}
         </section>
       ) : (

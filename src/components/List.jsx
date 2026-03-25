@@ -4,18 +4,18 @@ import { useState } from "react";
 import useFetch from "../hooks/useFetchData";
 
 const TOTAL_PAGES = 10;
-function Movie({ from }) {
+function List({ from }) {
   const data = useLoaderData();
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <>
       <TopBanner heading={`${from}`} />
-      <section className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-8 p-12">
+      <section className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-6 md:gap-8 p-6 md:p-12">
         {data.results.map((item) => {
           return (
             <Link to={`/${from}/${item.id}`} key={item.id}>
-              <div className="mb-6">
+              <div className="break-inside-avoid mb-6">
                 <img
                   src={`https://image.tmdb.org/t/p/w200/${item.poster_path}`}
                   alt={item.title}
@@ -23,8 +23,10 @@ function Movie({ from }) {
                   height="400"
                 />
                 <div className="p-4 bg-gray-100">
-                  <h3 className="text-xl mb-5">{item.title}</h3>
-                  <p className="line-clamp-2 overflow-hidden">
+                  <h3 className="text-md md:text-xl mb-5 line-clamp-1 overflow-hidden md:line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-md line-clamp-2 overflow-hidden">
                     {item.overview}
                   </p>
                 </div>
@@ -55,4 +57,4 @@ function Movie({ from }) {
   );
 }
 
-export default Movie;
+export default List;
