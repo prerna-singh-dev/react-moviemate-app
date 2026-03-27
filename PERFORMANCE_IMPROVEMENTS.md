@@ -90,7 +90,24 @@ Use this as evidence for resume/CV and as a running optimization history.
 
 ---
 
-### F. Deployment Caching Strategy (Netlify Free)
+### F. Smooth TV Fetch on Scroll (Reliability + Performance)
+
+#### What was happening earlier
+- TV list loading depended on `scrollY` checks + throttling + `sessionStorage` gating.
+- In practice this could miss the threshold, requiring users to scroll up/down multiple times before the TV API call triggered.
+
+#### What was changed
+- Replaced the scroll listener with an `IntersectionObserver` watching a small "sentinel" element placed just before the TV section.
+- When the sentinel comes near the viewport, we fetch the TV list once and disconnect the observer.
+
+#### Why this is better
+- More reliable than scroll events (no threshold misses).
+- Cheaper than continuous scroll listeners (browser handles it efficiently).
+- Fetch happens slightly before the user reaches the section (`rootMargin`) for smoother UX.
+
+---
+
+### G. Deployment Caching Strategy (Netlify Free)
 
 #### What was changed
 - Added `public/_headers` with cache rules:
@@ -124,7 +141,7 @@ Use this as evidence for resume/CV and as a running optimization history.
 Use this section to keep updating performance work.
 
 ### Pending high-value tasks
-- [ ] Update `index.html` preload `href` to `/background.webp` (currently points to JPG).
+- [ ] Keep `index.html` preload `href` aligned with the actual LCP hero (e.g. `/background-1920.webp`).
 - [ ] Remove unused JPG assets from `public/` if no longer needed.
 - [ ] Capture before/after Lighthouse metrics in a consistent table (3-run average).
 - [ ] Add CLS-focused image dimensions/aspect-ratio checks for all major images.

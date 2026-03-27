@@ -1,5 +1,5 @@
 import useFetch from "../hooks/useFetchData";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import SpinLoader from "../components/ui/SpinLoader";
 import DataCarousel from "../components/ui/DataCarousel";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ function Home() {
   const [toFetchData, setToFetchData] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
-  const lastCall = useRef(0);
 
   const [movieFetchData, movieLoading] = useFetch({
     url: "https://api.themoviedb.org/3/discover/movie",
@@ -32,11 +31,6 @@ function Home() {
   );
 
   useEffect(() => {
-    sessionStorage.removeItem("apiCalled");
-    setToFetchData(false);
-  }, []);
-
-  useEffect(() => {
     const trimmedSearchText = searchText.trim();
     if (!trimmedSearchText) {
       setDebouncedSearchText("");
@@ -51,23 +45,18 @@ function Home() {
   }, [searchText]);
 
   useEffect(() => {
+    if (toFetchData) return;
+
+    // Fetch TV list once after the user scrolls down.
     const handleScroll = () => {
-      const nowDate = Date.now();
-      if (nowDate - lastCall.current >= 500) {
-        lastCall.current = nowDate;
-        if (window.scrollY >= 150 && !toFetchData) {
-          setToFetchData(true);
-          sessionStorage.setItem("apiCalled", true);
-        }
+      if (window.scrollY > 150) {
+        setToFetchData(true);
+        window.removeEventListener("scroll", handleScroll);
       }
     };
 
-    if (!sessionStorage.getItem("apiCalled"))
-      window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [toFetchData]);
 
   function handleChange(searchText) {
@@ -208,6 +197,7 @@ function Home() {
           {movieFetchData?.results?.length > 0 && (
             <DataCarousel data={movieFetchData["results"]} category="Movie" />
           )}
+
           {tvLoading && (
             <div className="flex justify-center py-6">
               <SpinLoader />

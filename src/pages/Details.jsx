@@ -121,10 +121,10 @@ function Details() {
               </li>
             ))}
           </ul>
-          <p className="text-sm md:text-base lg:text-lg">{data.overview}</p>
+          <p className="text-sm md:text-base">{data.overview}</p>
         </>
 
-        <ul className="my-5 text-sm md:text-base lg:text-lg">
+        <ul className="my-5 text-sm md:text-base">
           {from === "movie" && (
             <>
               {directorList && directorList.length > 0 && (
