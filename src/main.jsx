@@ -4,18 +4,19 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-} from "react-router";
-import { RouterProvider } from "react-router/dom";
+} from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import "./index.css";
-import Home from "./components/Home";
+import Home from "./pages/Home";
 import App from "./App";
 import { loadData } from "./utils/loadData";
-import LoadingUI from "./components/LoadingUI";
+import LoadingUI from "./components/feedback/LoadingUI";
+import RouteError from "./components/feedback/RouteError";
 
-const List = lazy(() => import("./components/List"));
-const Details = lazy(() => import("./components/Details"));
-const About = lazy(() => import("./components/About"));
-const NotFound = lazy(() => import("./components/NotFound"));
+const List = lazy(() => import("./pages/List"));
+const Details = lazy(() => import("./pages/Details"));
+const About = lazy(() => import("./pages/About"));
+const NotFound = lazy(() => import("./components/feedback/NotFound"));
 
 async function movieDetailsloader({ params }, from) {
   const [data, credits] = await Promise.all([
@@ -28,7 +29,7 @@ async function movieDetailsloader({ params }, from) {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<App />}>
+      <Route path="/" element={<App />} errorElement={<RouteError />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route
@@ -44,17 +45,17 @@ const router = createBrowserRouter(
         <Route
           path="tv-shows"
           loader={() => loadData("https://api.themoviedb.org/3/discover/tv")}
-          element={<List from="tv" />}
+          element={<List from="tv-shows" />}
         />
         <Route
-          path="tv/:id"
+          path="tv-shows/:id"
           loader={({ params }) => movieDetailsloader({ params }, "tv")}
           element={<Details />}
         />
         <Route path="*" element={<NotFound />} />
       </Route>
-    </>
-  )
+    </>,
+  ),
 );
 
 createRoot(document.getElementById("root")).render(
@@ -62,5 +63,5 @@ createRoot(document.getElementById("root")).render(
     <Suspense fallback={<LoadingUI />}>
       <RouterProvider router={router} />
     </Suspense>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -5,6 +5,7 @@ body {
   font-weight: 400;
   font-style: normal;
   font-variation-settings: "wdth" 100;
+  color: #3f3f46;
 }
 
 .bitcount-single-500 {
@@ -14,8 +15,8 @@ body {
   font-style: normal;
   font-variation-settings: "slnt" 0, "CRSV" 0.5, "ELSH" 0, "ELXP" 0;
 }
-.birthstone-regular {
-  font-family: "Birthstone", cursive;
-  font-weight: 400;
-  font-style: normal;
+
+::selection {
+  background-color: #fdba74;
+  color: #431407;
 }

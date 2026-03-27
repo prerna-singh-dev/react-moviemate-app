@@ -1,13 +1,21 @@
-import { useLoaderData } from "react-router";
+import { Fragment } from "react";
+import { useLoaderData } from "react-router-dom";
 
 function Details() {
   const { data, credits, from } = useLoaderData();
 
-  const movieYear = new Date(data.release_date).getFullYear();
-  const tvYears = `${new Date(data.first_air_date).getFullYear()}-${new Date(
-    data.last_air_date
-  ).getFullYear()}`;
+  const movieYear = data.release_date
+    ? new Date(data.release_date).getFullYear()
+    : "N/A";
+  const firstAirYear = data.first_air_date
+    ? new Date(data.first_air_date).getFullYear()
+    : "N/A";
+  const lastAirYear = data.last_air_date
+    ? new Date(data.last_air_date).getFullYear()
+    : "N/A";
+  const tvYears = `${firstAirYear}-${lastAirYear}`;
   const movieTime = () => {
+    if (!data.runtime) return "N/A";
     const hrs = Math.floor(data.runtime / 60);
     const mins = data.runtime % 60;
     return `${hrs}h ${mins}m`;
@@ -20,17 +28,19 @@ function Details() {
       viewBox="0 0 24 24"
       width={size}
       height={size}
+      aria-hidden="true"
+      focusable="false"
     >
       <path d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.787 1.402 8.168L12 18.896l-7.336 3.87 1.402-8.168L.132 9.211l8.2-1.193z" />
     </svg>
   );
 
   const directorList = credits.crew.filter(
-    (item) => item.department === "Directing"
+    (item) => item.department === "Directing",
   );
 
   const writerList = credits.crew.filter(
-    (item) => item.department === "Writing"
+    (item) => item.department === "Writing",
   );
 
   const actorsList = credits.cast.slice(0, 5);
@@ -52,10 +62,11 @@ function Details() {
           <img
             src={`${
               !data.backdrop_path
-                ? `/background.jpg`
+                ? `/background.webp`
                 : `https://image.tmdb.org/t/p/original/${data.backdrop_path}`
             }`}
-            alt=""
+            alt={data.title ?? data.name}
+            title={data.title ?? data.name}
             className={`block w-full h-full object-cover ${
               !data.backdrop_path ? "object-bottom" : "object-top"
             }`}
@@ -64,9 +75,11 @@ function Details() {
       </section>
       <section className="p-6 md:p-12">
         <>
-          <div className="flex justify-between">
-            <h2 className="text-3xl md:text-5xl mb-2 flex-1">{data.title}</h2>
-            <div className="flex items-center gap-2 text-md text-gray-600">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
+            <h2 className="text-3xl md:text-5xl mb-2 flex-1 wrap-break-word">
+              {data.title ?? data.name}
+            </h2>
+            <div className="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-600">
               <Star />
               <span>{data.vote_average.toFixed(1)} / 10</span>
               <span>{getPopularityLabel(data.vote_count)}</span>
@@ -108,41 +121,47 @@ function Details() {
               </li>
             ))}
           </ul>
-          <p className="text-sm md:text-md lg:text-lg">{data.overview}</p>
+          <p className="text-sm md:text-base lg:text-lg">{data.overview}</p>
         </>
 
-        <ul className="my-5 text-sm md:text-md lg:text-lg">
+        <ul className="my-5 text-sm md:text-base lg:text-lg">
           {from === "movie" && (
             <>
               {directorList && directorList.length > 0 && (
                 <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2 flex items-center">
-                  <span className="text-md font-medium">Directors : </span>
+                  <span className="text-base font-medium">Directors : </span>
                   {directorList &&
                     directorList.slice(0, 5).map((director, index, arr) => (
-                      <>
-                        <span key={director.id} className="mx-2 text-gray-600">
+                      <Fragment key={director.id}>
+                        <span className="mx-2 text-gray-600">
                           {director.name}
                         </span>
-                        {index != arr.length - 1 && (
-                          <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                        {index !== arr.length - 1 && (
+                          <span
+                            aria-hidden="true"
+                            className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"
+                          ></span>
                         )}
-                      </>
+                      </Fragment>
                     ))}
                 </li>
               )}
               {writerList && writerList.length > 0 && (
                 <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
-                  <span className="text-md font-medium">Writers : </span>
+                  <span className="text-base font-medium">Writers : </span>
                   {writerList &&
                     writerList.slice(0, 5).map((writer, index, arr) => (
-                      <>
-                        <span key={writer.id} className="mx-2 text-gray-600">
+                      <Fragment key={writer.id}>
+                        <span className="mx-2 text-gray-600">
                           {writer.name}
                         </span>
-                        {index != arr.length - 1 && (
-                          <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                        {index !== arr.length - 1 && (
+                          <span
+                            aria-hidden="true"
+                            className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"
+                          ></span>
                         )}
-                      </>
+                      </Fragment>
                     ))}
                 </li>
               )}
@@ -150,17 +169,18 @@ function Details() {
           )}
           {actorsList && actorsList.length > 0 && (
             <li className="py-2 border-b-2 border-dashed border-gray-300 mb-2">
-              <span className="text-md font-medium">Stars</span>
+              <span className="text-base font-medium">Stars</span>
               {actorsList &&
                 actorsList.map((actor, index, arr) => (
-                  <>
-                    <span key={actor.id} className="mx-2 text-gray-600">
-                      {actor.name}
-                    </span>
-                    {index != arr.length - 1 && (
-                      <span className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"></span>
+                  <Fragment key={actor.id}>
+                    <span className="mx-2 text-gray-600">{actor.name}</span>
+                    {index !== arr.length - 1 && (
+                      <span
+                        aria-hidden="true"
+                        className="w-1 h-1 bg-gray-400 rounded-full inline-block mx-1"
+                      ></span>
                     )}
-                  </>
+                  </Fragment>
                 ))}
             </li>
           )}

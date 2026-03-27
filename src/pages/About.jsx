@@ -1,17 +1,20 @@
-import TopBanner from "./TopBanner";
+import TopBanner from "../layout/TopBanner";
+
 function About() {
   return (
     <>
       <TopBanner heading="About" />
       <section className="flex justify-between p-6 md:p-12 relative text-gray-700">
         <img
-          src="/about-movie-zone.jpg"
-          alt="About movie Zone"
+          src="/about-movie-zone.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
           className="hidden md:inline-flex w-100 h-100 lg:w-150 lg:h-150"
         />
-        <div className="p-0 md:pt-0 md:p-8 text-sm md:text-md  lg:text-lg">
+        <div className="p-0 md:pt-0 md:p-8 text-sm md:text-base lg:text-lg">
           <h2 className="text-xl lg:text-3xl sm:mb-3 mb-6 font-bold">
-            Welcome to MovieMate! 🎥🍿
+            Welcome to MovieMate!<span aria-hidden="true"> 🎥🍿</span>
           </h2>
           <p className="mb-4">
             MovieMate is your go-to web app for discovering movies and TV shows.
@@ -19,7 +22,7 @@ function About() {
             binge-worthy series, MovieMate makes it easy to explore, search, and
             dive into the details of your favorites.
           </p>
-          <p className="font-bold mb-4">Key Features: </p>
+          <h3 className="font-bold mb-4">Key Features: </h3>
           <ul className="mb-4">
             <li className="mb-2">
               <span className="font-bold">Browse Movies & TV Shows</span> – View
@@ -42,7 +45,7 @@ function About() {
             easy!
           </p>
 
-          <blockquote className="text-sm md:text-md lg:text-lg italic font-bold tracking-wider">
+          <blockquote className="text-sm md:text-base lg:text-lg italic font-bold tracking-wider">
             “Powered by React.js and React Router, MovieMate uses the TMDB API
             to bring real-time movie and TV show data to your screen, all
             wrapped in a clean, responsive, and interactive interface.”
